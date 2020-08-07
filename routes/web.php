@@ -12,7 +12,7 @@
 */
 
 Auth::routes();
-
+//test
 Route::get('payments/paypal', 'PayPalController@index')->name('paypal.index');
 Route::get('payments/paypal/express-checkout-success', 'PayPalController@getExpressCheckoutSuccess');
 Route::get('payments/paypal/express-checkout', 'PayPalController@getExpressCheckout')->name('paypal.express-checkout');
