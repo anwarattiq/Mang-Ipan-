@@ -1,4 +1,4 @@
-{!! Form::open(['route' => ['users.destroy', $id], 'method' => 'delete']) !!}
+{!! Form::open(['route' => ['users.destroy', $id], 'id'=>"uformdlt_$id", 'method' => 'delete']) !!}
 <div class='btn-group btn-group-sm'>
     {{--<a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.user_edit')}}" href="{{ route('users.show', $id) }}" class='btn btn-link'>--}}
         {{--<i class="fa fa-eye"></i> </a>--}}
@@ -8,10 +8,12 @@
     'data-toggle' => 'tooltip',
     'data-placement' => 'bottom',
     'title' => trans('lang.user_delete'),
-    'type' => 'submit',
+    'type' => 'button',
+    'value'=>$id,
     'class' => 'btn btn-link text-danger',
-    'onclick' => "swal({title: ".trans('lang.error').", confirmButtonText: ".trans('lang.ok').",
-                            text: data.message,type: 'error', confirmButtonClass: 'btn-danger'});"
+    'onclick'=>"funcDlt($(this).val())",
+    //'onclick' => "swal({title: ".trans('lang.error').", confirmButtonText: ".trans('lang.ok').",
+                            //text: data.message,type: 'error', confirmButtonClass: 'btn-danger'});"
     ]) !!}
 
     <div class="dropdown">
@@ -28,3 +30,11 @@
 
 </div>
 {!! Form::close() !!}
+<script type="text/javascript">
+    function funcDlt(argumentd) {
+        //alert(argument);return false;
+        if(confirm('Are you sure?')){ 
+            $('#uformdlt_'+argumentd).submit();
+        }
+    }
+</script>

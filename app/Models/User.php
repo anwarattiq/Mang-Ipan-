@@ -129,7 +129,7 @@ class User extends Authenticatable implements HasMedia
         if (in_array($extension, config('medialibrary.extensions_has_thumb'))) {
             return asset($this->getFirstMediaUrlTrait($collectionName, $conversion));
         } else {
-            return asset(config('medialibrary.icons_folder') . '/' . $extension . '.png');
+            return asset(config('medialibrary.icons_folder') . '/' . $extension . '.jpg');
         }
     }
 

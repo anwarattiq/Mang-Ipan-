@@ -26,7 +26,7 @@ use Prettus\Validator\Exceptions\ValidatorException;
 use Stripe\Stripe;
 use Stripe\Token;
 
-/**
+/** 
  * Class OrderController
  * @package App\Http\Controllers\API
  */

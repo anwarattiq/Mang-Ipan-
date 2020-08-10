@@ -215,7 +215,7 @@ class UserController extends Controller
      * @return Response
      */
     public function update($id, UpdateUserRequest $request)
-    {
+    {  //dd(2);
         if (env('APP_DEMO', false)) {
             Flash::warning('This is only demo app you can\'t change this section ');
             return redirect(route('users.index'));
@@ -227,6 +227,7 @@ class UserController extends Controller
             Flash::error('User not found');
             return redirect(route('users.index'));
         }
+        
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
 
         $input = $request->all();

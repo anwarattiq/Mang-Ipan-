@@ -44,10 +44,10 @@ class AppSettingController extends Controller
         if(!env('APP_DEMO',false)){
             $input = $request->except(['_method', '_token']);
             if (Str::endsWith(url()->previous(), "app/globals")) {
-                if (empty($input['app_logo'])) {
+                if (blank($input['app_logo'])) {
                     unset($input['app_logo']);
                 }
-                if (empty($input['custom_field_models'])) {
+                if (blank($input['custom_field_models'])) {
                     setting()->forget('custom_field_models');
                 }
                 if (!isset($input['blocked_ips'])) {
@@ -55,11 +55,15 @@ class AppSettingController extends Controller
                     setting()->forget('blocked_ips');
                 }
             }
-            $input = array_map(function ($value) { return is_null($value)? false : $value; }, $input);
+
+            $input = array_map(function ($value) { 
+                return is_null($value)? false : $value; }, $input);
 
             setting($input)->save();
+
             Flash::success(trans('lang.app_setting_global').' updated successfully.');
-            Artisan::call("config:clear");
+            //Artisan::call("config:clear");
+            //dd(2);
         }else{
             Flash::warning('This is only demo app you can\'t change this section ');
         }

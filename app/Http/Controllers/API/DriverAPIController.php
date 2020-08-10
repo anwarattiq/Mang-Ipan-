@@ -51,7 +51,7 @@ class DriverAPIController extends Controller
     /**
      * Display the specified Driver.
      * GET|HEAD /drivers/{id}
-     *
+     * 
      * @param  int $id
      *
      * @return \Illuminate\Http\JsonResponse

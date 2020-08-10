@@ -76,7 +76,8 @@
                 <?php endif; ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
-                        <img src="<?php echo e(auth()->user()->getFirstMediaUrl('avatar','icon')); ?>" class="brand-image mx-2 img-circle elevation-2" alt="User Image">
+                      
+                      <img src="<?php echo e(auth()->user()->getFirstMediaUrl('avatar','icon')); ?>" class="brand-image mx-2 img-circle elevation-2" alt="User Image">
                         <i class="fa fa fa-angle-down"></i> <?php echo auth()->user()->name; ?>
 
 

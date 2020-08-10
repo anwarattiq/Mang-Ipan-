@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-<?php echo e(setting('theme_contrast')); ?>-<?php echo e(setting('theme_color')); ?> elevation-4">
     <!-- Brand Logo -->
     <a href="<?php echo e(url('dashboard')); ?>" class="brand-link <?php echo e(setting('logo_bg_color','bg-white')); ?>">
-        <img src="<?php echo e($app_logo); ?>" alt="<?php echo e(setting('app_name')); ?>" class="brand-image">
+        <img src="<?php echo e($app_logo); ?>" alt="" class="brand-image">
         <span class="brand-text font-weight-light"><?php echo e(setting('app_name')); ?></span>
     </a>
 
