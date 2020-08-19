@@ -18,7 +18,8 @@ class Permissions
         'ForgotPasswordController',
         'ResetPasswordController',
         'RegisterController',
-        'PayPalController'
+        'PayPalController',
+        
     ];
 
     /**
@@ -29,8 +30,9 @@ class Permissions
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
+    {   
         $permission = $request->route()->getName();
+        
         if ($this->match($request->route()) && auth()->user()->canNot($permission)) {
             throw new UnauthorizedException(403, trans('error.permission') . ' <b>' . $permission . '</b>');
         }

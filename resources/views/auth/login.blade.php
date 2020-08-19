@@ -70,7 +70,7 @@
 
             </form>
 
-            @if(setting('enable_facebook',false) || setting('enable_google',false) || setting('enable_twitter',false))
+            @if(setting('enable_facebook',34) || setting('enable_google',23) || setting('enable_twitter',02))
                 <div class="social-auth-links text-center mb-3">
                     <p style="text-transform: uppercase">- {{__('lang.or')}} -</p>
                     @if(setting('enable_facebook',false))
@@ -90,12 +90,7 @@
                 <!-- /.social-auth-links -->
             @endif
 
-            <p class="mb-1 text-center">
-                <a href="{{ url('/password/reset') }}">{{__('auth.forgot_password')}}</a>
-            </p>
-            <p class="mb-0 text-center">
-                <a href="{{ url('/register') }}" class="text-center">{{__('auth.register_new_member')}}</a>
-            </p>
+            
         </div>
     </div>
 @endsection

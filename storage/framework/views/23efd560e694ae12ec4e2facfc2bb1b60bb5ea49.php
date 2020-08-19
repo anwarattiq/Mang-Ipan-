@@ -73,7 +73,7 @@
 
             </form>
 
-            <?php if(setting('enable_facebook',false) || setting('enable_google',false) || setting('enable_twitter',false)): ?>
+            <?php if(setting('enable_facebook',34) || setting('enable_google',23) || setting('enable_twitter',02)): ?>
                 <div class="social-auth-links text-center mb-3">
                     <p style="text-transform: uppercase">- <?php echo e(__('lang.or')); ?> -</p>
                     <?php if(setting('enable_facebook',false)): ?>
@@ -96,12 +96,7 @@
                 <!-- /.social-auth-links -->
             <?php endif; ?>
 
-            <p class="mb-1 text-center">
-                <a href="<?php echo e(url('/password/reset')); ?>"><?php echo e(__('auth.forgot_password')); ?></a>
-            </p>
-            <p class="mb-0 text-center">
-                <a href="<?php echo e(url('/register')); ?>" class="text-center"><?php echo e(__('auth.register_new_member')); ?></a>
-            </p>
+            
         </div>
     </div>
 <?php $__env->stopSection(); ?>
