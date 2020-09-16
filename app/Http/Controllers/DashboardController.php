@@ -56,4 +56,9 @@ class DashboardController extends Controller
             ->with("membersCount", $membersCount)
             ->with("earning", $earning);
     }
+    public function indexCourier()
+  {
+    dd(3);
+    return view('courier.index');
+  }
 }

@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -6,12 +7,23 @@ use Illuminate\Http\Request;
 use Redirect,Response,DB,Config;
 class PackageController extends Controller {
 
+=======
+
+namespace App\Http\Controllers;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Auth;
+use DB;
+class PackageController extends Controller {
+ 
+>>>>>>> c7201dd02bf8533373bef6c2d8f2f6b0e3f8240e
   public function __construct() {
       //$this->middleware('auth');
   }
 
   public function indexCourier()
   {
+<<<<<<< HEAD
   	$courier=DB::table('courier_types')->get();
   	return view('courier.index',compact('courier'));
   }
@@ -104,3 +116,10 @@ class PackageController extends Controller {
   }
 
 }
+=======
+  	//dd(3);
+  	return view('courier.index');
+  }
+
+}
+>>>>>>> c7201dd02bf8533373bef6c2d8f2f6b0e3f8240e

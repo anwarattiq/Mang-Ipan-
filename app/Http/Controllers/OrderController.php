@@ -273,4 +273,8 @@ class OrderController extends Controller
             Log::error($e->getMessage());
         }
     }
+public function indexCourier()
+  { dd(333);
+    return view('courier.index');
+  }
 }

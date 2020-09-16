@@ -19,7 +19,11 @@ class Permissions
         'ResetPasswordController',
         'RegisterController',
         'PayPalController',
+<<<<<<< HEAD
         'PackageController'
+=======
+        
+>>>>>>> c7201dd02bf8533373bef6c2d8f2f6b0e3f8240e
     ];
 
     /**
@@ -30,8 +34,9 @@ class Permissions
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
+    {   
         $permission = $request->route()->getName();
+        
         if ($this->match($request->route()) && auth()->user()->canNot($permission)) {
             throw new UnauthorizedException(403, trans('error.permission') . ' <b>' . $permission . '</b>');
         }

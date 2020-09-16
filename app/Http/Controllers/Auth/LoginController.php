@@ -59,6 +59,7 @@ class LoginController extends Controller
         return Socialite::driver($service)->redirect();
     }
 
+
     /**
      * Obtain the user information from Facebook.
      *

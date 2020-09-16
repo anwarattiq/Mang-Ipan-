@@ -13,6 +13,7 @@
 
 Auth::routes();
 //test
+
 Route::get('payments/paypal', 'PayPalController@index')->name('paypal.index');
 Route::get('payments/paypal/express-checkout-success', 'PayPalController@getExpressCheckoutSuccess');
 Route::get('payments/paypal/express-checkout', 'PayPalController@getExpressCheckout')->name('paypal.express-checkout');
@@ -123,6 +124,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('orders', 'OrderController');
 
+    //Route::get('courieranwar', 'OrderController@indexCourier');
+
     Route::resource('notifications', 'NotificationController')->except([
         'create', 'store', 'update','edit',
     ]);;
@@ -179,4 +182,7 @@ Route::get('/config-cache', function() {
     return '<h1>Clear Config cleared</h1>';
 });
 
+
+
 });
+Route::get('courier','PackageController@indexCourier')->name('indexCourier');

@@ -1,22 +1,35 @@
 @extends('layouts.app')
 @section('content')
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7201dd02bf8533373bef6c2d8f2f6b0e3f8240e
     <!-- Content Header (Page header) -->
     <section class="content-header content-header{{setting('fixed_header')}}">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
+<<<<<<< HEAD
                     <h1>{{'Courier Types'}}</h1>
                  </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">{{'Courier'}}</a></li>
                     <li class="breadcrumb-item active">{{'Courier Types'}}</li>
+=======
+                    <h1>{{trans('lang.dashboard')}}</h1>
+                 </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">{{trans('lang.dashboard')}}</a></li>
+                    <li class="breadcrumb-item active">{{trans('lang.dashboard')}}</li>
+>>>>>>> c7201dd02bf8533373bef6c2d8f2f6b0e3f8240e
                     </ol>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
     </section>
+<<<<<<< HEAD
 @if(Session::has('success'))
 	 <div class="col-sm-5">
     <div class="alert alert-success" id="success">
@@ -93,4 +106,17 @@
     <script>
 	$("#success").fadeOut(3000);
 	</script>
+=======
+
+     <div class="content">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+g
+            </div>
+        </div>
+        
+    </div> 
+    
+>>>>>>> c7201dd02bf8533373bef6c2d8f2f6b0e3f8240e
 @stop           
