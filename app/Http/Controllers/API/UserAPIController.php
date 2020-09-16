@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Response;
 use Prettus\Validator\Exceptions\ValidatorException;
-
+use DB;
 class UserAPIController extends Controller
 {
     private $userRepository;
@@ -153,6 +153,320 @@ class UserAPIController extends Controller
 
         return $this->sendResponse($settings, 'Settings retrieved successfully');
     }
+	
+	
+	/**
+     * return  prices baseprice etc.
+     *
+     * @
+     * @param Request $request
+     *
+     * return  prices baseprice etc  http://multi-restaurants.gadgetekbahamas.com/api/courier/prices
+     */
+	public function courierPrices(Request $request){
+		$user = $this->userRepository->findByField('api_token', $request->input('api_token'))->first();
+
+        if (!$user) {
+            return response()->json([
+                'error' => true,
+                'code' => 404,
+                'message'=>'fail']);
+        }
+		$basePriceObj=DB::table('base_prices')->orderBy('id','desc')->first();
+		$perkm_chargeObj=DB::table('perkm_charges')->orderBy('id','desc')->first();
+		$fragile_chargeObj=DB::table('fragile_charges')->orderBy('id','desc')->first();
+		
+		$basePrice=$basePriceObj?$basePriceObj->base_price:'';
+		$perkm_charge=$perkm_chargeObj?$perkm_chargeObj->perkm_charge:'';
+		$fragile_charge=$fragile_chargeObj?$fragile_chargeObj->fragile_charge:'';
+		return response()->json([
+		'error' => false,
+        'code' => 202,
+		'message'=>'success',
+		['Base Price' => $basePrice, 
+		'Per km Charge' =>$perkm_charge,
+		'Fragile Charge'=>$fragile_charge,
+		'currency'=>'₱',
+		]
+		]);
+		
+	}
+	/* reutrn courier types  http://multi-restaurants.gadgetekbahamas.com/api/courier/types  */
+	public function courierTypes(Request $request){
+		$user = $this->userRepository->findByField('api_token', $request->input('api_token'))->first();
+
+        if (!$user) {
+            return response()->json([
+                'error' => true,
+                'code' => 404,
+                'message'=>'fail']);
+        }
+		$courierTypes=DB::table('courier_types')->get();
+		//$data=array();
+		return response()->json([
+		'error' => false,
+        'code' => 202,
+		'message'=>'success',
+		'courier_types' =>$courierTypes, 
+		'currency'=>'₱',
+		
+		]);
+		
+	}
+	/* reutrn courier modes  http://multi-restaurants.gadgetekbahamas.com/api/courier/types  */
+	public function courierModes(Request $request){
+		$user = $this->userRepository->findByField('api_token', $request->input('api_token'))->first();
+
+        if (!$user) {
+            return response()->json([
+                'error' => true,
+                'code' => 404,
+                'message'=>'fail']);
+        }
+		$courierModes=DB::table('courier_modes')->get();
+		//$data=array();
+		return response()->json([
+		'error' => false,
+        'code' => 202,
+		'message'=>'success',
+		'courier_modes' =>$courierModes, 
+		'currency'=>'₱',
+		
+		]);
+		
+	}
+	
+	/*
+one is to take all inputs
+anothet will return total cost
+another will ne order place api
+in order place api :
+
+so in calculation api:
+Input pick up location
+Destination
+Courier Type
+Description
+Courier Mode
+Fragile/Non Fragile
+Receiver's name
+Receiver's Phone Number
+Total Amount
+Payment Method
+	
+	*/
+	public function priceCalculation(Request $request){
+		$user = $this->userRepository->findByField('api_token', $request->input('api_token'))->first();
+
+        if (!$user) {
+            return response()->json([
+                'error' => true,
+                'code' => 404,
+                'message'=>'fail']);
+        }
+		$unit ="K";
+		
+		$fragile_charge=0;
+		$inputs = $request->all();
+		$courierMode=$inputs['courierMode'];
+		$courierType=$inputs['courierType'];
+		$fragile=$inputs['fragile'];
+		$receiverName=$inputs['receiverName'];
+		$receiverPhone=$inputs['receiverPhone'];
+		$paymentMethod=$inputs['paymentMethod'];
+		$lat1=$inputs['latFrom'];
+		$lon1=$inputs['lanFrom'];
+		
+		$lat2=$inputs['latTo'];
+		$lon2=$inputs['lanTo'];
+		
+		$basePriceObj=DB::table('base_prices')->orderBy('id','desc')->first();
+		$perkm_chargeObj=DB::table('perkm_charges')->orderBy('id','desc')->first();
+		$fragile_chargeObj=DB::table('fragile_charges')->orderBy('id','desc')->first();
+		$courierTypes=DB::table('courier_types')->select('base_price')->where('name',$courierType)->first();
+		$courierModes=DB::table('courier_modes')->select('base_price')->where('name',$courierMode)->first();
+		
+		$basePrice=$basePriceObj?$basePriceObj->base_price:'';
+		$perkm_charge=$perkm_chargeObj?$perkm_chargeObj->perkm_charge:'';
+		$fragile_charge=$fragile_chargeObj?$fragile_chargeObj->fragile_charge:'';
+		$courierTyp_price=$courierTypes?$courierTypes->base_price:'';
+		$courierMod_price=$courierModes?$courierModes->base_price:'';
+		
+		$theta = $lon1 - $lon2; 
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)); 
+        $dist = acos($dist); 
+        $dist = rad2deg($dist); 
+        $miles = $dist * 60 * 1.1515;
+        $unit = strtoupper($unit);
+
+        if ($unit == "K") 
+        {
+           $distance=($miles * 1.609344); 
+        } 
+		 $kmwiseCharge=$perkm_charge*$distance;
+		 $total=$basePrice+$fragile_charge+$courierTyp_price+$courierMod_price+$kmwiseCharge;
+		 return response()->json([
+		'error' => false,
+        'code' => 202,
+		'message'=>'success', 
+		['courier_mode' =>$courierMode,
+		 'courier_type' =>$courierType,	
+	     'receiver_name'=>$receiverName, 
+		 'receiver_phone'=>$receiverPhone, 		 
+		 'total_amount'=>$total,
+		 'currency'=>'₱',
+		]
+		]);
+		
+	}
+	
+	public function anwrOrderPlace(Request $request){
+		
+		$user = $this->userRepository->findByField('api_token', $request->input('api_token'))->first();
+
+        if (!$user) {
+            return response()->json([
+                'error' => true,
+                'code' => 404,
+                'message'=>'fail']);
+        }
+		$unit = "K";
+		$fragile_charge=0;
+		$inputs = $request->all();
+		$courierMode=$inputs['courierMode'];
+		$courierType=$inputs['courierType'];
+		$fragile=$inputs['fragile'];
+		$receiverName=$inputs['receiverName'];
+		$receiverPhone=$inputs['receiverPhone'];
+		$paymentMethod=$inputs['paymentMethod'];
+		$description=$inputs['description'];
+		
+		$lat1=$inputs['latFrom'];
+		$lon1=$inputs['lanFrom'];
+		
+		$lat2=$inputs['latTo'];
+		$lon2=$inputs['lanTo'];
+		
+		$basePriceObj=DB::table('base_prices')->orderBy('id','desc')->first();
+		$perkm_chargeObj=DB::table('perkm_charges')->orderBy('id','desc')->first();
+		$fragile_chargeObj=DB::table('fragile_charges')->orderBy('id','desc')->first();
+		$courierTypes=DB::table('courier_types')->select('base_price')->where('name',$courierType)->first();
+		$courierModes=DB::table('courier_modes')->select('base_price')->where('name',$courierMode)->first();
+		
+		$basePrice=$basePriceObj?$basePriceObj->base_price:'';
+		$perkm_charge=$perkm_chargeObj?$perkm_chargeObj->perkm_charge:'';
+		$fragile_charge=$fragile_chargeObj?$fragile_chargeObj->fragile_charge:'';
+		$courierTyp_price=$courierTypes?$courierTypes->base_price:'';
+		$courierMod_price=$courierModes?$courierModes->base_price:'';
+		
+		$theta = $lon1 - $lon2; 
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)); 
+        $dist = acos($dist); 
+        $dist = rad2deg($dist); 
+        $miles = $dist * 60 * 1.1515;
+        $unit = strtoupper($unit);
+
+        if ($unit == "K") 
+        {
+           $distance=($miles * 1.609344); 
+        } 
+		
+		$num=" ";
+
+		for ($i = 0; $i<8; $i++) 
+		{
+		   
+			$num.= mt_rand(0,9);
+			
+		} 
+		 $kmwiseCharge=$perkm_charge*$distance;
+		 $total=$basePrice+$fragile_charge+$courierTyp_price+$courierMod_price+$kmwiseCharge;
+		 $tracking_number=rand(10000000,10000000);
+		 DB::table('orders_book')->insert([
+		 'courier_mode'=>$courierMode,
+		 'courier_type' =>$courierType,	
+		 'fragile'=>$fragile_charge,
+		 'receiver_name'=>$receiverName,
+		 'description'=>$description,	
+		 'total'=>$total,
+		 'distance'=>$distance,
+		 'receiver_phone'=>$receiverPhone,
+		 'payment_method'=>$paymentMethod,
+		 'tracking_number'=>'MI-'.$num
+		 ]);
+		 return response()->json([
+		 'tracking_number'=>'MI-'.$num,
+		 'message'=>'success',
+		 'error' => false,
+         'code' => 202,  
+		]);
+		
+	}
+	public function anwr(Request $request){
+			$user = $this->userRepository->findByField('api_token', $request->input('api_token'))->first();
+
+        if (!$user) {
+            return response()->json([
+                'error' => true,
+                'code' => 404,
+                'message'=>'fail']);
+        }
+		$unit = "K";     
+		$fragile_charge=0;
+		$inputs = $request->all();
+		$courierMode=$inputs['courierMode'];
+		$courierType=$inputs['courierType'];
+		$fragile=$inputs['fragile']; 
+		$receiverName=$inputs['receiverName'];
+		$receiverPhone=$inputs['receiverPhone'];
+		$paymentMethod=$inputs['paymentMethod'];
+		$description=$inputs['description'];
+		
+		$lat1=$inputs['latFrom'];
+		$lon1=$inputs['lanFrom'];
+		
+		$lat2=$inputs['latTo'];
+		$lon2=$inputs['lanTo'];
+		
+		$basePriceObj=DB::table('base_prices')->orderBy('id','desc')->first();
+		$perkm_chargeObj=DB::table('perkm_charges')->orderBy('id','desc')->first();
+		$fragile_chargeObj=DB::table('fragile_charges')->orderBy('id','desc')->first();
+		$courierTypes=DB::table('courier_types')->select('base_price')->where('name',$courierType)->first();
+		$courierModes=DB::table('courier_modes')->select('base_price')->where('name',$courierMode)->first();
+		
+		$basePrice=$basePriceObj?$basePriceObj->base_price:'';
+		$perkm_charge=$perkm_chargeObj?$perkm_chargeObj->perkm_charge:'';
+		$fragile_charge=$fragile_chargeObj?$fragile_chargeObj->fragile_charge:'';
+		$courierTyp_price=$courierTypes?$courierTypes->base_price:'';
+		$courierMod_price=$courierModes?$courierModes->base_price:'';
+		
+		$theta = $lon1 - $lon2; 
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)); 
+        $dist = acos($dist); 
+        $dist = rad2deg($dist); 
+        $miles = $dist * 60 * 1.1515;
+        $unit = strtoupper($unit);
+
+        if ($unit == "K") 
+        {
+           $distance=($miles * 1.609344); 
+        } 
+		 $kmwiseCharge=$perkm_charge*$distance;
+		 $total=$basePrice+$fragile_charge+$courierTyp_price+$courierMod_price+$kmwiseCharge;
+		 return response()->json([
+		 'courier_mode'=>$courierMode,
+		 'courier_type' =>$courierType,	
+		 'fragile'=>$fragile_charge,
+		 'receiver_name'=>$receiverName,
+		 'description'=>$description,	
+		 'total'=>$total,
+		 'currency'=>'₱',
+		 'message'=>'success',
+		 'error' => false,
+         'code' => 202,
+		]);
+		
+	}
 
     /**
      * Update the specified User in storage.
@@ -209,7 +523,7 @@ class UserAPIController extends Controller
             return $this->sendError([
                 'error' => 'Reset link not sent',
                 'code' => 401,
-            ], 'Reset link not sent');
+            ], 'Reset link not sent'); 
         }
 
     }

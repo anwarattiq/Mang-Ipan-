@@ -144,5 +144,39 @@ Route::middleware('auth')->group(function () {
     Route::resource('driversPayouts', 'DriversPayoutController');
 
     Route::resource('restaurantsPayouts', 'RestaurantsPayoutController');
+    
+    Route::get('courier','PackageController@indexCourier')->name('indexCourier');
+ Route::get('courier/mode','PackageController@courierMode')->name('courierMode');
+ Route::post('add/courier/mode','PackageController@addcourierMode')->name('addcourierMode');
+  Route::post('add/courier/type','PackageController@addcourierType')->name('addcourierType');
+  Route::get('courier/package','PackageController@pacakgeDetail')->name('pacakgeDetail');
+  Route::post('add/courier/package','PackageController@addpacakgeDetail')->name('addpacakgeDetail');
+  
+  
+   Route::get('base/price','PackageController@basePrice')->name('basePrice');
+   Route::post('add/base/price','PackageController@addbasePrice')->name('addbasePrice');
+   
+   Route::get('per/km/price','PackageController@PerkmPrice')->name('PerkmPrice');
+   Route::post('add/per/km/price','PackageController@addPerkmPrice')->name('addPerkmPrice');
+   
+   Route::get('fragile/price','PackageController@fragilePrice')->name('fragilePrice');
+   Route::post('add/fragile/price','PackageController@addFragilePrice')->name('addFragilePrice');
+   Route::get('show/orders/listwise','PackageController@ordersList')->name('ordersList');
+   Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    return '<h1>Cache facade value cleared</h1>';
+});
+
+//Clear View cache:
+Route::get('/view-clear', function() {
+    $exitCode = Artisan::call('view:clear');
+    return '<h1>View cache cleared</h1>';
+});
+
+//Clear Config cache:
+Route::get('/config-cache', function() {
+    $exitCode = Artisan::call('config:cache');
+    return '<h1>Clear Config cleared</h1>';
+});
 
 });

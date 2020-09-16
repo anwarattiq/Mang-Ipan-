@@ -68,5 +68,7 @@ class FaqAPIController extends Controller
         }
 
         return $this->sendResponse($faq->toArray(), 'Faq retrieved successfully');
+		
     }
+	
 }

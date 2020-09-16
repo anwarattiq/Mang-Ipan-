@@ -38,20 +38,26 @@ Route::resource('extras', 'API\ExtraAPIController');
 Route::resource('faqs', 'API\FaqAPIController');
 Route::resource('restaurant_reviews', 'API\RestaurantReviewAPIController');
 Route::resource('currencies', 'API\CurrencyAPIController');
+Route::get('courier/prices', 'API\UserAPIController@courierPrices');
+Route::get('courier/types', 'API\UserAPIController@courierTypes');
+Route::get('courier/modes', 'API\UserAPIController@courierModes');
+Route::post('price/calculation','API\UserAPIController@priceCalculation');
+Route::post('price/total', 'API\UserAPIController@anwr');
+Route::post('place/order/total', 'API\UserAPIController@anwrOrderPlace'); 
 
 Route::middleware('auth:api')->group(function () {
-    Route::group(['middleware' => ['role:driver']], function () {
+    Route::group(['middleware' => ['role:driver']], function () { 
         Route::prefix('driver')->group(function () {
             Route::resource('orders', 'API\OrderAPIController');
-            Route::resource('notifications', 'API\NotificationAPIController');
-            Route::post('users/{id}', 'API\UserAPIController@update');
+            Route::resource('notifications', 'API\NotificationAPIController'); 
+            Route::post('users/{id}', 'API\UserAPIController@update'); 
             Route::resource('faq_categories', 'API\FaqCategoryAPIController');
-            Route::resource('faqs', 'API\FaqAPIController');
+            Route::resource('faqs', 'API\FaqAPIController'); 
         });
     });
     Route::group(['middleware' => ['role:manager']], function () {
         Route::prefix('manager')->group(function () {
-            
+             
             Route::resource('drivers', 'API\DriverAPIController');
 
             Route::resource('earnings', 'API\EarningAPIController');

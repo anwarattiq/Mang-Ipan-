@@ -153,6 +153,49 @@
     </li>
 @endcan
 
+	 <li class="nav-item has-treeview ">
+                <a href="#" class="nav-link ">
+                    <i class="nav-icon fa fa-user-secret"></i>                    <p>
+                        Courier
+                        <i class="right fa fa-angle-left"></i>
+                    </p></a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{route('basePrice')}}">
+                            <i class="nav-icon fa fa-circle-o"></i><p>Base Price</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{route('PerkmPrice')}}">
+                            <i class="nav-icon fa fa-circle-o"></i><p>Per Km Charge</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{route('fragilePrice')}}">
+                            <i class="nav-icon fa fa-circle-o"></i> <p>Fragile Charge</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{route('indexCourier')}}">
+                            <i class="nav-icon fa fa-circle-o"></i><p>Courier Type Charge</p>
+                        </a>
+                    </li>
+					<li class="nav-item">
+                        <a class="nav-link " href="{{route('courierMode')}}">
+                            <i class="nav-icon fa fa-circle-o"></i><p>Courier Mode Charge</p>
+                        </a>
+                    </li>
+					
+					<li class="nav-item">
+                        <a class="nav-link " href="{{route('ordersList')}}">
+                            <i class="nav-icon fa fa-circle-o"></i><p>Orders List</p>
+                        </a>
+                    </li>
+                </ul>
+
+            </li>
+
+
 <li class="nav-header">{{trans('lang.app_setting')}}</li>
 @can('medias')
     <li class="nav-item">
@@ -340,6 +383,8 @@
 
         </ul>
     </li>
+	
+
 @endcan
 
 
